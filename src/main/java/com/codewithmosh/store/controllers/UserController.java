@@ -3,14 +3,12 @@ package com.codewithmosh.store.controllers;
 import java.util.Set;
 
 import org.springframework.data.domain.Sort;
-import java.util.Set;
-
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,12 +28,6 @@ public class UserController {
 
     @GetMapping
     public Iterable<UserDto> getAllUsers(
-        @RequestParam(required=false, defaultValue="") String sort
-    ) {
-        if (!Set.of("name","email").contains(sort))
-            sort = "name";
-        return userRepository.findAll(Sort.by(sort)).stream().map(userMapper::toDto).toList();
-    public Iterable<UserDto> getAllUsers(
         @RequestParam(required=false, defaultValue="", name="sort") String sortBy
     ) {
         if (!Set.of("name","email").contains(sortBy))
@@ -52,5 +44,10 @@ public class UserController {
         }
 
         return ResponseEntity.ok(userMapper.toDto(user));
+    }
+
+    @PostMapping
+    public UserDto createUser(@RequestBody UserDto data) {
+        return data;
     }
 }
